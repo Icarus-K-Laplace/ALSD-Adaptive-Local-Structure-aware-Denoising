@@ -1,0 +1,20 @@
+import cv2
+import numpy as np
+from src.denoiser import ALSD
+
+def main():
+    # Synthetic test
+    img = np.zeros((512, 512), dtype=np.uint8)
+    for i in range(512): img[i,:] = i//2
+    cv2.circle(img, (256,256), 100, 200, -1)
+    
+    noisy = np.clip(img + np.random.normal(0, 25, img.shape), 0, 255).astype(np.uint8)
+    
+    denoiser = ALSD()
+    result = denoiser.denoise(noisy)
+    
+    cv2.imwrite("result.png", np.hstack([img, noisy, result]))
+    print("Done. Saved to result.png")
+
+if __name__ == "__main__":
+    main()
